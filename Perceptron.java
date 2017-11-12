@@ -1,33 +1,34 @@
 package neural_network;
 
+import java.util.Random;
+
 public class Perceptron {
 	double[] inputs;
-	int answer;
-	double learningRate = 0.01;
-	Neuron nron;
+	double[] weights;
+	Random random = new Random();
 	
-	Perceptron(double[] input, int desired) {
+	Perceptron(double[] input) {
 		int n = input.length + 1;
+		weights = new double[n];
 		inputs = new double[n];
-		nron = new Neuron(n);
 		
 		for(int i=0; i<n; i++) {
 			if(i==0) {
-				answer = desired;
-				inputs[i] = 1;
+				inputs[i] = 1;	//bias
 			}
 			else {
-				inputs[i] = input[i];
+				inputs[i] = input[i-1];
 			}
+			weights[i] = random.nextDouble();	//random values of weights -1 ~ 1
 		}
 	}
 	
 	int feedforward() {
 		double sum = 0;
-		for (int i = 0; i < nron.weights.length; i++) {
-			sum += inputs[i]*nron.weights[i];	//Á÷¼±ÀÇ ¹æÁ¤½Ä
+		for (int i = 0; i < weights.length; i++) {
+			sum += inputs[i]*weights[i];	//ì§ì„ ì˜ ë°©ì •ì‹ (nì°¨ì›ì¼ë•Œ n-1ì°¨ì›ì˜ ë°©ì •ì‹) inputì´ nê°œ
 		}
-		System.out.println("sum : " + sum);
+
 		return activate(sum);
 	}
 	
@@ -36,15 +37,4 @@ public class Perceptron {
 		else return -1;
 	}
 	
-	void train(int desired) {
-		int guess = feedforward();
-		double error = desired - guess;
-		System.out.println("guess :" + guess + " error : " + error);
-		for (int i = 0; i < nron.weights.length; i++) {
-			nron.weights[i] += learningRate * error * inputs[i];
-		}	/* Àß¸øµÈ inputÀÌ µé¾î¿Í¼­ ÃÖÁ¾ weight¸¦ Æ²¸®°Ô ¹Ù²Ü ¼ö µµ ÀÖÀ¸¹Ç·Î ÇØ´ç input¿¡ ¿ÏÀüÈ÷ ¸Âµµ·Ï weight ¹Ù²ÙÁø ¾Ê´Â´Ù
-		 	 * inputÀÇ ¿À·ù¸¦ ¹«½ÃÇÒ ¼ö ÀÖµµ·Ï weight º¯È­ È½¼ö¸¦ Á¦ÇÑÇÏ°í learning rate(c)¸¦ ÀûÀýÇÑ °ªÀ¸·Î ÁöÁ¤ÇÏ´Â°Ô point
-		 	 */
-		System.out.println("2nd : " + feedforward());
-	}
 }
