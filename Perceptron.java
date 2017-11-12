@@ -3,30 +3,23 @@ package neural_network;
 import java.util.Random;
 
 public class Perceptron {
-	double[] inputs;
 	double[] weights;
 	Random random = new Random();
 	
-	Perceptron(double[] input) {
-		int n = input.length + 1;
+	Perceptron(int n) {
 		weights = new double[n];
-		inputs = new double[n];
-		
+
 		for(int i=0; i<n; i++) {
-			if(i==0) {
-				inputs[i] = 1;	//bias
-			}
-			else {
-				inputs[i] = input[i-1];
-			}
 			weights[i] = random.nextDouble();	//random values of weights -1 ~ 1
 		}
 	}
 	
-	int feedforward() {
+	int feedforward(double[] inputs) {
+		
 		double sum = 0;
+		
 		for (int i = 0; i < weights.length; i++) {
-			sum += inputs[i]*weights[i];	//ì§ì„ ì˜ ë°©ì •ì‹ (nì°¨ì›ì¼ë•Œ n-1ì°¨ì›ì˜ ë°©ì •ì‹) inputì´ nê°œ
+			sum += inputs[i]*weights[i];	//Á÷¼±ÀÇ ¹æÁ¤½Ä (nÂ÷¿øÀÏ¶§ n-1Â÷¿øÀÇ ¹æÁ¤½Ä) inputÀÌ n°³
 		}
 
 		return activate(sum);

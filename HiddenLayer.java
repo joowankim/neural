@@ -1,101 +1,50 @@
 package neural_network;
 
-import java.util.Random;
-
 public class HiddenLayer {
 	Layer[] layer;
 	int numOfLayer;
-	static double desired;
-	static double guess;
+	double learningRate = 0.01;
+	double guess;
 	
-	HiddenLayer(double[] input, int[] ptron_num, int order, double answer) {
-		int i;
-		numOfLayer = order + 1;
-		desired = answer;
-		layer = new Layer[numOfLayer];
-		for(i=0; i<order; i++) {
-			if(i==0) {
-				layer[i] = new Layer(input, ptron_num[i]);
-			}
-			else {
-				layer[i] = new Layer(layer[i-1].outputs, ptron_num[i]);
-			}
-		}
-		layer[i] = new Layer(layer[i-1].outputs, 1);
-		guess = layer[i].outputs[0];
-	}
-	
-	HiddenLayer(double[] input, int[] ptron_num, int order) {
+	HiddenLayer(int n, int[] ptron_num, int order) {
 		int i;
 		numOfLayer = order + 1;
 		layer = new Layer[numOfLayer];
 		for(i=0; i<order; i++) {
 			if(i==0) {
-				layer[i] = new Layer(input, ptron_num[i]);
+				layer[i] = new Layer(n, ptron_num[i]);
 			}
 			else {
-				layer[i] = new Layer(layer[i-1].outputs, ptron_num[i]);
+				layer[i] = new Layer(ptron_num[i-1], ptron_num[i]);
 			}
 		}
-		layer[i] = new Layer(layer[i-1].outputs, 1);
-		guess = layer[i].outputs[0];
+		layer[i] = new Layer(ptron_num[i-1], 1);	//only one output
 	}
 	
-	static HiddenLayer[] training = new HiddenLayer[50000];
-	static HiddenLayer[] test = new HiddenLayer[10];
-	static Random random = new Random();
-	
-	static double f(double x) {
-		return 2*x+1;
+	void forwardInput(double[] input) {
+		int i;
+		for(i=0; i<numOfLayer; i++) {
+			if (i==0) {
+				layer[i].inputs = input;
+			}
+			else {
+				layer[i].inputs = layer[i-1].outputs;
+			}
+		}
+		guess = layer[i-1].outputs[0];
 	}
 	
-	public static void main(String[] args) {
-		int layerNum = 1;	// the number of layer
-		int[] eachPtronNum = {1};	// the number of each layer's perceptrons 
-		double[] example = new double[2];	// input (x, y)
-		int cnt = 0;
+	void adjustWeight(double desired) {
+		double error = desired - guess;
 		
-		//training
-		for(int i=0; i<50000; i++) {
-			example[0] = random.nextInt()*20;
-			example[1] = random.nextInt()*20;
-			
-			int answer = 1;
-			if(example[1]<f(example[0])) answer = -1;
-			training[i] = new HiddenLayer(example, eachPtronNum, layerNum, answer);
-			for(int j=layerNum; j>=0; j--) {
-				training[i].layer[j].adjustWeight(desired, guess);
-			}
-			/*
-			System.out.println(i + ". " + "(x,y) : (" + example[0] + ", "+ example[1] + ")");
-			System.out.println("desired : " + desired);
-			System.out.println("guess   : " + guess);
-			if(i>40000 && guess == desired) {
-				cnt++;
-				System.out.println("O");
-			}
-			else System.out.println("X");
-			*/
+		for(int k=0; k<numOfLayer; k++) {
+			for(int i = 0; i < layer[k].ptrons_num; i++) {
+				for(int j = 0; j <layer[k].ptrons[i].weights.length; j++)
+					layer[k].ptrons[i].weights[j] += learningRate * error * layer[k].inputs[j];
+			}	/* 잘못된 input이 들어와서 최종 weight를 틀리게 바꿀 수 도 있으므로 해당 input에 완전히 맞도록 weight 바꾸진 않는다
+			 	* input의 오류를 무시할 수 있도록 weight 변화 횟수를 제한하고 learning rate(c)를 적절한 값으로 지정하는게 point
+			 	*/
 		}
-		
-		// test
-		for(int i=0; i<10; i++) {
-			example[0] = random.nextInt()*20;
-			example[1] = random.nextInt()*20;
-			
-			int answer = 1;
-			if(example[1]<f(example[0])) answer = -1;
-			test[i] = new HiddenLayer(example, eachPtronNum, layerNum);
-			System.out.println(i + ". " + "(x,y) : (" + example[0] + ", "+ example[1] + ")");
-			System.out.println("desired : " + answer);
-			System.out.println("guess   : " + guess);
-			if(guess == answer) {
-				cnt++;
-				System.out.println("O");
-			}
-			else System.out.println("X");
-			System.out.println("");
-		}
-		System.out.println("        correct answer : " + cnt + "/10");
 	}
+
 }
