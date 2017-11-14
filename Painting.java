@@ -2,27 +2,29 @@ package neural_network;
 
 import java.util.Vector;
 import java.awt.event.*;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 
 public class Painting extends Frame{
-	int x, y;
+	double[] P;
 	HiddenLayer m;
 	Trainer t;
-	Vector<double[]> vector = new Vector<double[]>(2000);
-	Point p;
+	static Vector<double[]> vector = new Vector<double[]>(2000);
 
-	public void swing(double[] p, HiddenLayer mor) {
-		this.x = (int)p[0];
-		this.y = (int)p[1];
-		vector.addElement(p);
-		m = mor;
-		
+	Painting (){
 		this.setTitle("Graphic");
 		this.addWindowListener(new WindowHandler());
 		this.setSize(640, 360);
 		this.setVisible(true);
+	}
+	
+	public void swing(double[] p, HiddenLayer mor) {
+		P = new double[2];
+		this.P[0] = p[0];
+		this.P[1] = p[1];
+		vector.add(P);
+		m = mor;
+
 		repaint();
 
 	}
@@ -33,28 +35,27 @@ public class Painting extends Frame{
 		}
 	}
 	public void update(Graphics g) {
-		this.paint(g);
+		this.paint(g);	
 	}
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-
+		
 		for (int i=0; i<vector.size(); i++) {
 			t = new Trainer(vector.elementAt(i), m);
 			
 			if (m.guess>0) {
-				g.fillOval(x, y, 4, 4);
+				g.fillOval((int)vector.elementAt(i)[0], (int)vector.elementAt(i)[1], 4, 4);
 				//g2.draw(new Line2D.Double(-0.5, 0, 179.5, 360));
-				//Ã£¾Æ°¡´Â Á÷¼±À» Ç¥ÇöÇÒ ¿¹Á¤
+				//ì°¾ì•„ê°€ëŠ” ì§ì„ ì„ í‘œí˜„í•  ì˜ˆì •
 			}
 			else {
-				g.drawOval(x, y, 4, 4);
+				g.drawOval((int)vector.elementAt(i)[0], (int)vector.elementAt(i)[1], 4, 4);
 				//g2.draw(new Line2D.Double(-0.5, 0, 179.5, 360));
 			}
+	
 		}
 		g2.setStroke(new BasicStroke(2));
 		g2.draw(new Line2D.Double(-0.5, 0, 179.5, 360));
 	
 	}
 }
-
-
