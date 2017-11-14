@@ -4,9 +4,10 @@ import java.util.*;
 
 public class Trainer {
 	double[] inputs;
+	static HiddenLayer mormort;
 	static Painting p;
 
-	Trainer(double[] input, HiddenLayer m) {
+	Trainer(double[] input) {
 		
 		int n = input.length+1;
 		inputs = new double[n];
@@ -20,17 +21,16 @@ public class Trainer {
 				inputs[i] = input[i-1];
 			}
 		}
-		m.forwardInput(inputs);
+		mormort.forwardInput(inputs);
 	}
 	
 	static Trainer[] training = new Trainer[2000];
-	static HiddenLayer mormort;
 	static Trainer[] testing = new Trainer[10];
 	static Random random = new Random();
 	int count = 0;
 
 	static double f(double x) {
-		return 2*x+1;
+		return x;
 	}
 	
 	
@@ -48,17 +48,16 @@ public class Trainer {
 		for(int i=0; i<2000; i++) {
 			example[0] = random.nextDouble()*640;
 			example[1] = random.nextDouble()*360;
-	
+
 			double answer = 1;
 			if(example[1]<f(example[0])) answer = 0;
-			
-			training[i] = new Trainer(example, mormort);
+
+			training[i] = new Trainer(example);
 			mormort.adjustWeight(answer);
 			
 			p.swing(example, mormort);
 			
 		}
-		
 		
 		// test
 		for(int i=0; i<10; i++) {
@@ -68,9 +67,9 @@ public class Trainer {
 			double answer = 1;
 			if(example[1]<f(example[0])) answer = 0;
 			
-			testing[i] = new Trainer(example, mormort);
+			testing[i] = new Trainer(example);
 			
-			//p.swing(example, mormort);
+			//p.swing(example);
 			
 			System.out.println(i + ". " + "(x,y) : (" + example[0] + ", "+ example[1] + ")");
 			System.out.println("desired : " + answer);
