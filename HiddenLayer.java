@@ -24,12 +24,14 @@ public class HiddenLayer {
 	void forwardInput(double[] input) {
 		int i;
 		for(i=0; i<numOfLayer; i++) {
+			
 			if (i==0) {
 				layer[i].inputs = input;
 			}
 			else {
 				layer[i].inputs = layer[i-1].outputs;
 			}
+			layer[i].computeOutput();
 		}
 		guess = layer[i-1].outputs[0];
 	}
@@ -41,8 +43,8 @@ public class HiddenLayer {
 			for(int i = 0; i < layer[k].ptrons_num; i++) {
 				for(int j = 0; j <layer[k].ptrons[i].weights.length; j++)
 					layer[k].ptrons[i].weights[j] += learningRate * error * layer[k].inputs[j];
-			}	/* Àß¸øµÈ inputÀÌ µé¾î¿Í¼­ ÃÖÁ¾ weight¸¦ Æ²¸®°Ô ¹Ù²Ü ¼ö µµ ÀÖÀ¸¹Ç·Î ÇØ´ç input¿¡ ¿ÏÀüÈ÷ ¸Âµµ·Ï weight ¹Ù²ÙÁø ¾Ê´Â´Ù
-			 	* inputÀÇ ¿À·ù¸¦ ¹«½ÃÇÒ ¼ö ÀÖµµ·Ï weight º¯È­ È½¼ö¸¦ Á¦ÇÑÇÏ°í learning rate(c)¸¦ ÀûÀýÇÑ °ªÀ¸·Î ÁöÁ¤ÇÏ´Â°Ô point
+			}	/* ìž˜ëª»ëœ inputì´ ë“¤ì–´ì™€ì„œ ìµœì¢… weightë¥¼ í‹€ë¦¬ê²Œ ë°”ê¿€ ìˆ˜ ë„ ìžˆìœ¼ë¯€ë¡œ í•´ë‹¹ inputì— ì™„ì „ížˆ ë§žë„ë¡ weight ë°”ê¾¸ì§„ ì•ŠëŠ”ë‹¤
+			 	* inputì˜ ì˜¤ë¥˜ë¥¼ ë¬´ì‹œí•  ìˆ˜ ìžˆë„ë¡ weight ë³€í™” íšŸìˆ˜ë¥¼ ì œí•œí•˜ê³  learning rate(c)ë¥¼ ì ì ˆí•œ ê°’ìœ¼ë¡œ ì§€ì •í•˜ëŠ”ê²Œ point
 			 	*/
 		}
 	}
