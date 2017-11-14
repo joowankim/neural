@@ -14,7 +14,7 @@ public class Painting extends Frame{
 	Painting (){
 		this.setTitle("Graphic");
 		this.addWindowListener(new WindowHandler());
-		this.setSize(640, 360);
+		this.setSize(800, 450);
 		this.setVisible(true);
 	}
 	
@@ -41,7 +41,7 @@ public class Painting extends Frame{
 		Graphics2D g2 = (Graphics2D)g;
 		
 		for (int i=0; i<vector.size(); i++) {
-			t = new Trainer(vector.elementAt(i), m);
+			t = new Trainer(vector.elementAt(i));
 			
 			if (m.guess>0) {
 				g.fillOval((int)vector.elementAt(i)[0], (int)vector.elementAt(i)[1], 4, 4);
@@ -54,8 +54,10 @@ public class Painting extends Frame{
 			}
 	
 		}
+		//g2.setStroke(new BasicStroke(2));
+		//g2.draw(new Line2D.Double(-0.5, 0, 179.5, 360));
 		g2.setStroke(new BasicStroke(2));
-		g2.draw(new Line2D.Double(-0.5, 0, 179.5, 360));
+		g2.draw(new Line2D.Double(0, 0, 450, 450));
 	
 	}
 }
