@@ -19,7 +19,7 @@ public class Perceptron {
 		double sum = 0;
 		
 		for (int i = 0; i < weights.length; i++) {
-			sum += inputs[i]*weights[i];	//Á÷¼±ÀÇ ¹æÁ¤½Ä (nÂ÷¿øÀÏ¶§ n-1Â÷¿øÀÇ ¹æÁ¤½Ä) inputÀÌ n°³
+			sum += inputs[i]*weights[i];	//ì§ì„ ì˜ ë°©ì •ì‹ (nì°¨ì›ì¼ë•Œ n-1ì°¨ì›ì˜ ë°©ì •ì‹) inputì´ nê°œ
 		}
 
 		return activate(sum);
@@ -27,7 +27,7 @@ public class Perceptron {
 	
 	int activate(double sum) {
 		if (sum > 0) return 1;
-		else return -1;
+		else return 0;
 	}
 	
 }
