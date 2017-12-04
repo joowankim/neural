@@ -7,9 +7,9 @@ public class Perceptron {
 	Random random = new Random();
 	
 	Perceptron(int n) {
-		weights = new double[n];
+		weights = new double[n+1];
 
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<n+1; i++) {
 			weights[i] = random.nextDouble();	//random values of weights -1 ~ 1
 		}
 	}
@@ -23,6 +23,16 @@ public class Perceptron {
 		}
 
 		return activate(sum);
+	}
+	
+	double sigmoid(double sum) {
+		double r ;
+		
+		if(sum < -10) r = 1/(1 + Math.exp(10));
+		else if(sum > 10) r = 1/(1 + Math.exp(-10));
+		else r = 1/(1 + Math.exp(-sum));
+		
+		return r;
 	}
 	
 	int activate(double sum) {
