@@ -6,7 +6,6 @@ public class Layer {
 	double[] outputs;
 	double[] inputs;
 	
-	
 	Layer(int n, int ptron_num) {
 		ptrons_num	= ptron_num;
 		ptrons = new Perceptron[ptrons_num];
