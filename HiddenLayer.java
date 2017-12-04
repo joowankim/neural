@@ -8,7 +8,7 @@ public class HiddenLayer {
 	
 	HiddenLayer(int n, int[] ptron_num, int order) {
 		int i;
-		numOfLayer = order + 1;
+		numOfLayer = order;
 		layer = new Layer[numOfLayer];
 		for(i=0; i<order; i++) {
 			if(i==0) {
@@ -18,28 +18,36 @@ public class HiddenLayer {
 				layer[i] = new Layer(ptron_num[i-1], ptron_num[i]);
 			}
 		}
-		layer[i] = new Layer(ptron_num[i-1], 1);	//only one output
+		//layer[i] = new Layer(ptron_num[i-1], 1);	//only one output
 	}
 	
 	void forwardInput(double[] input) {
-		int i;
+		int i,j;
 		for(i=0; i<numOfLayer; i++) {
 			
 			if (i==0) {
-				layer[i].inputs = input;
+				System.out.println("input : " + input.length);
+				layer[i].inputs = new double[input.length+1];
+				for(j=0; j<input.length; j++) layer[i].inputs[j] = input[j];
+				layer[i].inputs[j] = 1;	//bias
 			}
 			else {
-				layer[i].inputs = layer[i-1].outputs;
+				System.out.println("layer[" + i + "] : " + layer[i-1].outputs.length);
+				layer[i].inputs = new double[layer[i-1].outputs.length+1];
+				for(j=0; j<input.length; j++) layer[i].inputs[j] = layer[i-1].outputs[j];
+				layer[i].inputs[j] = 1;	//bias
 			}
 			layer[i].computeOutput();
 		}
 		guess = layer[i-1].outputs[0];
+		System.out.println("end");
 	}
 	
 	void adjustWeight(double desired) {
 		double error = desired - guess;
 		
 		for(int k=0; k<numOfLayer; k++) {
+			//error = error*(1-guess)*guess;
 			for(int i = 0; i < layer[k].ptrons_num; i++) {
 				for(int j = 0; j <layer[k].ptrons[i].weights.length; j++)
 					layer[k].ptrons[i].weights[j] += learningRate * error * layer[k].inputs[j];
