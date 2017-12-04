@@ -8,11 +8,13 @@ public class Trainer {
 	static Painting p;
 
 	Trainer(double[] input) {
-		
-		int n = input.length+1;
+		int n = input.length;
+		//int n = input.length+1;
 		inputs = new double[n];
-		int i;
+		//int i;
 		
+		inputs = input;
+		/*
 		for (i=0; i<n; i++) {
 			if(i==0) {
 				inputs[i] = 1;	//bias
@@ -20,7 +22,7 @@ public class Trainer {
 			else {
 				inputs[i] = input[i-1];
 			}
-		}
+		}*/
 		mormort.forwardInput(inputs);
 	}
 	
@@ -35,14 +37,14 @@ public class Trainer {
 	
 	
 	public static void main(String[] args) {
-		int layerNum = 1;	// the number of layer
-		int[] eachPtronNum = {2};	// the number of each layer's perceptrons
+		int layerNum = 2;	// the number of layer
+		int[] eachPtronNum = {3, 1};	// the number of each layer's perceptrons
 		double[] example = new double[2];	// input (x, y)
 		int cnt = 0;
 		
 		p = new Painting();
 		
-		mormort = new HiddenLayer(3, eachPtronNum, layerNum);
+		mormort = new HiddenLayer(2, eachPtronNum, layerNum);
 		
 		//training
 		for(int i=0; i<2000; i++) {
