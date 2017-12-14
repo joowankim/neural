@@ -1,4 +1,4 @@
-package ai;
+package ANN;
 
 public abstract class Function {
 
@@ -38,21 +38,20 @@ public abstract class Function {
 		}
 
 	};
-
-	public static Function ATAN = new Function() {
-
+	
+	public static Function STEP = new Function() {
+		
 		@Override
 		protected double calc(double input) {
-			return 1.0 / (input * input + 1);
+			if(input > 0) return 1;
+			else return 0;
 		}
 		
 		@Override
 		protected double calcDeff(double input) {
-			return Math.atan(input);
+			return 1;
 		}
 	};
-	
-	
 
 	/**
 	 * 어떤 함수.
@@ -62,10 +61,12 @@ public abstract class Function {
 	 */
 	public double[] calc(double[] input) {
 		
+		double[] inputs = new double[input.length];
+		
 		for (int i = 0; i < input.length; i++) {
-			input[i] = calc(input[i]);
+			inputs[i] = calc(input[i]);
 		}
-		return input;
+		return inputs;
 	}
 
 	/**
@@ -75,10 +76,13 @@ public abstract class Function {
 	 * @return
 	 */
 	public double[] calcDeff(double[] input) {
+		
+		double[] inputs = new double[input.length];
+		
 		for (int i = 0; i < input.length; i++) {
-			input[i] = calcDeff(input[i]);
+			inputs[i] = calcDeff(input[i]);
 		}
-		return input;
+		return inputs;
 	}
 
 	// 이 아래의 두 함수는, 벡터의 각 원소에 무슨 연산을 할 지를 정한다.
